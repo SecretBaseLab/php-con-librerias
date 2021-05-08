@@ -1,0 +1,17 @@
+{% extends "main.twig" %} {% block contenido %}
+<h1>Añandir trabajo</h1>
+<div class="alert alert-primary" role="alert">
+    {{ responseMessage }}
+</div>
+<form action="/jobs/add" method="POST" enctype="multipart/form-data">
+    <label for="">Title</label>
+    <input type="text" name="title">
+    <br>
+    <label for="">description</label>
+    <input type="text" name="description">
+    <br>
+    <input type="file" name="logo">
+        <br>
+    <input type="submit" value="Guardar">
+</form>
+{% endblock %}

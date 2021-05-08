@@ -1,0 +1,114 @@
+{% extends "main.twig" %}
+
+{% block title %}
+	Dashboard |
+	{{ parent() }}
+{% endblock %}
+
+{% block contenido %}
+	<div class="row">
+		<h1>{{ nombre }}</h1>
+	</div>
+	<div class="row">
+		<div class="col-md-3">
+			<img src="" alt="">
+		</div>
+		<div class="col-md-9"></div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			<h1>Resumen</h1>
+			<hr>
+			<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Perferendis culpa eius rerum est cupiditate sint temporibus aperiam recusandae? Nam delectus minima, fugit itaque aut, ipsa, eaque repudiandae cum assumenda magnam culpa quam! Libero quis
+								            earum dolorem quia perspiciatis, veniam cum aut itaque ut quibusdam id non iusto blanditiis commodi unde magni obcaecati a reprehenderit consequuntur voluptate molestias sint? Consequatur adipisci debitis modi amet quidem magni ullam vel porro
+								            illum nobis? Culpa ducimus maxime laborum quasi assumenda eaque corporis aperiam nihil pariatur, sed quisquam quia eligendi ipsa cum doloribus, aliquid fuga? Eaque, cupiditate in. Dolorem quos atque dolor aliquam eaque et.
+			</p>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-9">
+			<h1>Experiencia de trabajo</h1>
+			<ul>
+				{% for job in jobs %}
+					<hr>
+					<li>
+						<div class="row">
+							<div class="col-md-2">
+								<img class="w-100" src="public/uploads/{{ job.fileName_hash }}" alt="">
+							</div>
+							<div class="col-md-10">
+								<h5>{{ job.title }}</h5>
+								<p>{{ job.description }}</p>
+							</div>
+						</div>
+					</li>				
+					<li>
+						<p>
+							{{ job.getDurationAsString() }}
+						</p>
+						<strong>Logros</strong>
+						<ul>
+							<li>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Laborum, optio?</li>
+							<li>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Laborum, optio?</li>
+							<li>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Laborum, optio?</li>
+						</ul>
+					</li>
+				{% endfor %}
+			</ul>
+		</div>
+		<div class="col-md-3">
+			<h1>Skiils</h1>
+			<hr>
+		</div>
+	</div>
+	<div class="row">
+		<h1>Proyectos</h1>
+		<hr>
+		<div class="col-md-12">
+			<ul>
+				{% for pj in projects %}
+					<li>
+						<h5>{{pj.title}}</h5>
+						<p>{{pj.description}}</p>
+					</li>				
+					<li>
+						<p>
+							{{ pj.getDurationAsString() }}
+						</p>
+						<ul>
+							<li>Lorem ipsum dolor sit amet consectetur adipisicing elit. Recusandae, dignissimos.</li>
+							<li>Numquam reprehenderit soluta deserunt reiciendis unde non veniam vitae quisquam.</li>
+							<li>Eaque ut quo deleniti tenetur placeat reiciendis harum explicabo odio.</li>
+						</ul>
+					</li>
+				{% endfor %}
+			</ul>
+		</div>
+	</div>
+{% endblock %}
+{% block ant %}
+	<div id="ant"></div>
+
+	<form id="form_ant" class="card border-primary p-4 w-25">
+		<select id="identificacion">
+			<option value="RUC">REGISTRO UNICO CONTRIBUYENTE</option>
+			<option value="PAS">PASAPORTE</option>
+			<option selected="selected" value="CED">CÉDULA IDENTIDAD</option>
+			<option value="PLA">PLACA</option>
+		</select>
+		<input type="text" id="placa" placeholder="placa" required>
+
+		<input type="submit" value="Consultar<">
+	</form>
+
+	<script>
+		form_ant.onsubmit = (e) => {
+e.preventDefault();
+
+let _identificacion = identificacion.value;
+let _placa = placa.value.toUpperCase();
+
+ant.innerHTML = `<iframe src="https://sistematransito.ant.gob.ec:5038/PortalWEB/paginas/clientes/clp_grid_citaciones.jsp?ps_tipo_identificacion=${_identificacion}&ps_identificacion=${_placa}&ps_placa=" width="100%" height="400px" frameborder="0"></iframe>`
+}
+	</script>
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends "main.twig" %}
+{% block contenido %}
+    <h1>Dashboard</h1>
+    <ul>
+        <li>
+            <a href="/users/add">Add User</a>
+        </li>
+        <li>
+            <a href="/jobs/add">Add Job</a>
+        </li>
+        <li>
+            <a href="/projects/add">Add Project</a>
+        </li>
+    </ul>
+    <br>
+    <a class="btn btn-info" href="/logout">Logout</a>
+{% endblock %}

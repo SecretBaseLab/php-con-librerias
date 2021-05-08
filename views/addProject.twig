@@ -1,0 +1,15 @@
+{% extends "main.twig" %} {% block contenido %}
+<h1>Añandir proyecto</h1>
+<div class="alert alert-primary" role="alert">
+    {{ responseMessage }}
+</div>
+<form action="/projects/add" method="POST">
+    <label for="">Title</label>
+    <input type="text" name="title">
+    <br>
+    <label for="">description</label>
+    <input type="text" name="description">
+    <br>
+    <input type="submit" value="Guardar">
+</form>
+{% endblock %}
