@@ -10,8 +10,8 @@ require_once "../vendor/autoload.php";
 session_start();
 
 //usando vars de entorno pa acceder a la config de la base
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/..');
-$dotenv->load();
+// $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/..');
+// $dotenv->load();
 
 use Illuminate\Database\Capsule\Manager as Capsule;
 
