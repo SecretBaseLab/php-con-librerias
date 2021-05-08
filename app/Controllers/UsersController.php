@@ -2,6 +2,7 @@
 namespace App\Controllers;
 
 use App\Models\user;
+use Laminas\Diactoros\Response\RedirectResponse;
 use Respect\Validation\Validator as v;
 
 class UsersController extends BaseController{
@@ -20,12 +21,13 @@ class UsersController extends BaseController{
                 ->key('password', v::stringType()->notEmpty()->noWhitespace());
             try {   
                 $projectValidator->assert($postData);
-
+                
                 $user = new user();
                 $user->email = $postData['email'];
                 $user->password = password_hash($postData['password'], PASSWORD_DEFAULT);
                 $user->save();
                 $responseMessage = 'Saved';
+                return new RedirectResponse('/login');
             } catch (\Exception $e) {
                 $responseMessage = $e->getMessage();
             }

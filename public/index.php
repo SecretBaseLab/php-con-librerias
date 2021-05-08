@@ -10,15 +10,16 @@ require_once "../vendor/autoload.php";
 session_start();
 
 //usando vars de entorno pa acceder a la config de la base
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__.'/..');
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/..');
 $dotenv->load();
 
 use Illuminate\Database\Capsule\Manager as Capsule;
+
 $capsule = new Capsule;
 $capsule->addConnection([
     'driver'    => $_ENV['DB_DRIVE'],
     'host'      => $_ENV['DB_HOST'],
-    'database'  => $_ENV['DB_NAME'],   
+    'database'  => $_ENV['DB_NAME'],
     'username'  => $_ENV['DB_USER'],
     'password'  => $_ENV['DB_PASS'],
     'charset'   => 'utf8',
@@ -44,6 +45,8 @@ $dir_raiz = '/';   //? ruta riaz del proyecto
 
 //? router con aura router
 use Aura\Router\RouterContainer;
+use Laminas\Diactoros\Response\RedirectResponse;
+
 $routerContainer = new RouterContainer();
 
 $map = $routerContainer->getMap();      //? generador del mapa de rutas
@@ -52,50 +55,50 @@ $map->get('index', $dir_raiz, [
     "action" => "indexAction"
 ]);
 
-$map->get('addJobs', $dir_raiz.'jobs/add', [
+$map->get('addJobs', $dir_raiz . 'jobs/add', [
     "controller" => "App\Controllers\JobsController",
     "action" => "getAddJobAction",
     "auth" => true
 ]);
-$map->post('saveJobs', $dir_raiz.'jobs/add', [
+$map->post('saveJobs', $dir_raiz . 'jobs/add', [
     "controller" => "App\Controllers\JobsController",
     "action" => "getAddJobAction"
 ]);
 
-$map->get('addProjects', $dir_raiz.'projects/add', [
+$map->get('addProjects', $dir_raiz . 'projects/add', [
     "controller" => "App\Controllers\ProjectsController",
     "action" => "getAddProjectAction",
     "auth" => true
 ]);
-$map->post('saveProjects', $dir_raiz.'projects/add', [
+$map->post('saveProjects', $dir_raiz . 'projects/add', [
     "controller" => "App\Controllers\ProjectsController",
     "action" => "getAddProjectAction"
 ]);
 
-$map->get('addUsers', $dir_raiz.'users/add', [
+$map->get('addUsers', $dir_raiz . 'users/add', [
     "controller" => "App\Controllers\UsersController",
     "action" => "getAddUserAction",
     "auth" => true
 ]);
-$map->post('saveUsers', $dir_raiz.'users/save', [
+$map->post('saveUsers', $dir_raiz . 'users/save', [
     "controller" => "App\Controllers\UsersController",
     "action" => "postSaveUserAction"
 ]);
 
-$map->get('loginForm', $dir_raiz.'login', [
+$map->get('loginForm', $dir_raiz . 'login', [
     "controller" => "App\Controllers\AuthController",
     "action" => "getloginAction"
 ]);
-$map->post('auth', $dir_raiz.'auth', [
+$map->post('auth', $dir_raiz . 'auth', [
     "controller" => "App\Controllers\AuthController",
     "action" => "postLoginAction"
 ]);
-$map->get('logoutForm', $dir_raiz.'logout', [
+$map->get('logoutForm', $dir_raiz . 'logout', [
     "controller" => "App\Controllers\AuthController",
     "action" => "getlogoutAction"
 ]);
 
-$map->get('admin', $dir_raiz.'admin', [
+$map->get('admin', $dir_raiz . 'admin', [
     "controller" => "App\Controllers\AdminController",
     "action" => "getIndexAction",
     "auth" => true
@@ -106,8 +109,9 @@ $matcher = $routerContainer->getMatcher();
 
 $route = $matcher->match($request);
 
-if(!$route) echo 'no route';
-else{
+if (!$route) {
+    echo 'no route';
+} else {
     // print_r( $route->handler);
     //recibe el array con el namesapce y la accion/metodo de esa clase
     $handlerData = $route->handler;
@@ -117,14 +121,14 @@ else{
 
     //autenticacion
     $sessionUserId = $_SESSION['userId'] ?? null;
-    if ( $needsAuth && !$sessionUserId ) {
-        echo 'protected route';
-        die;
+    if ($needsAuth && !$sessionUserId) {    //? niega el acceso si no esta logeado
+        // echo 'protected route';
+        $response = new RedirectResponse('/');                            
+    }else{
+        $controller = new $controllerName;      //genera una instancia de esa clase
+        $response = $controller->$actionName($request);             //llama al metodo y recibe un obj response
     }
 
-    $controller = new $controllerName;      //genera una instancia de esa clase
-    $response = $controller->$actionName($request);             //llama al metodo y recibe un obj response
-    
     //imprimendo los headers del response
     foreach ($response->getHeaders() as $name => $values) {
         foreach ($values as $value) {
@@ -132,7 +136,7 @@ else{
         }
     }
 
-    http_response_code( $response->getStatusCode() );   //asignando el status code al response
+    http_response_code($response->getStatusCode());   //asignando el status code al response
     echo $response->getBody();  //obtiene el cuerpo html del response
 }
 // $failedRoute = $matcher->getFailedRoute();
@@ -143,4 +147,4 @@ else{
 if ($route == "/")
     require "../index.php";
 elseif($route = "addJob")
-    require "../addJob.php"; */ 
+    require "../addJob.php"; */
