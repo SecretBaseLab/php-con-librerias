@@ -3,10 +3,11 @@
 namespace App\Controllers;
 
 use App\Models\job;
+use Laminas\Diactoros\ServerRequest;
 use Respect\Validation\Validator as v;
 
 class JobsController extends BaseController{
-    public function getAddJobAction($request){
+    public function getAddJobAction(ServerRequest $request){
         // print_r($request->getMethod());
         // print_r((string)$request->getBody());    //contenido del cuerpo de la peticion http
         // print_r($request->getParsedBody());      //array con los datos del request
